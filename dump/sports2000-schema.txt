@@ -1,0 +1,50 @@
+# sports2000 Database Schema Summary
+
+Schema definition file: `dump/sports2000.df` (Progress .df format)
+
+## Sequences
+
+| Sequence        | Initial | Increment | Min-Val | Cycle |
+|-----------------|---------|-----------|---------|-------|
+| NextCustNum     | 1000    | 5         | 1000    | no    |
+| NextInvNum      | 1000    | 1         | 1000    | no    |
+| NextOrdNum      | 1000    | 5         | 1000    | no    |
+| NextItemNum     | 100     | 10        | 100     | no    |
+| NextRefNum      | 1       | 1         | 1       | no    |
+| NextVisitor     | 1000    | 1         | 1000    | no    |
+| NextSupplNum    | 0       | 1         | 0       | no    |
+| NextLocalDefNum | 0       | 1         | 0       | no    |
+| NextWareNum     | 0       | 1         | 0       | no    |
+| NextBinNum      | 0       | 1         | 0       | no    |
+| NextPONum       | 0       | 1         | 0       | no    |
+| NextEmpNum      | 0       | 1         | 0       | no    |
+| NextInvTransNum | 0       | 1         | 0       | no    |
+
+## Tables (partial, from first 500 lines of .df)
+
+### Benefits (Area: Employee)
+Employee benefits table.
+- EmpNum (integer, PK via index "EmpNo")
+- HealthCare (character x(8))
+- LifeInsurance, Pension401K, StockPurchase, MedicalSpending, DependentCare (integer)
+
+### BillTo (Area: Order)
+Bill-to address information for an order.
+- CustNum + BillToID (composite PK via index "custnumbillto")
+- Name, Address, Address2, City, State, PostalCode, Contact, Phone
+
+### Bin (Area: Inventory)
+Warehouse bins containing items.
+- BinNum (PK), Itemnum, WarehouseNum, Qty, BinName
+- Indexes: BinNum (unique primary), ItemNum, WarehouseNumItemNum
+
+### Customer (Area: Cust_Data)
+Customer information including balance and address.
+- CustNum (PK, validation: > 0)
+- Name, Address, Address2, City, State, Country (default 'USA'), Phone, Contact
+- SalesRep (validation: must exist in Salesrep)
+- Comments, CreditLimit (0-9,999,999, default 1500), Balance
+- Terms (default 'Net30'), Discount (>= 0), PostalCode, Fax
+- Table triggers: CREATE (crcust.p), DELETE (delcust.p)
+
+*Note: This is a summary of the first 500 lines of the schema. The full sports2000 schema contains additional tables (Item, Order, OrderLine, Salesrep, Warehouse, etc.).*
